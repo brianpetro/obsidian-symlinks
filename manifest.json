@@ -1,10 +1,10 @@
 {
-  "id": "symlink-manager-plugin",
-  "name": "Symlink Manager Plugin",
-  "version": "1.1.0",
+  "id": "-smart-symlinks",
+  "name": "Smart Symlinks",
+  "version": "1.0.0",
   "minAppVersion": "0.9.12",
   "description": "Manages platform-specific symlinks by recreating them on each platform.",
-  "author": "Your Name",
-  "authorUrl": "https://your-website.com",
+  "author": "🌴 Brian Petro",
+  "authorUrl": "https://smartconnections.app",
   "isDesktopOnly": true
 }
