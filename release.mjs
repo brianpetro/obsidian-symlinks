@@ -7,8 +7,14 @@ import { exec } from 'child_process';
 
 dotenv.config();
 
+const package_json = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 // Read manifest.json
 const manifest_json = JSON.parse(fs.readFileSync('./manifest.json', 'utf8'));
+// if package.json version differs from manifest.json version, use package.json version and update manifest.json
+if (package_json.version !== manifest_json.version) {
+  manifest_json.version = package_json.version;
+  fs.writeFileSync('./manifest.json', JSON.stringify(manifest_json, null, 2));
+}
 const version = manifest_json.version;
 const manifest_id = manifest_json.id;
 
