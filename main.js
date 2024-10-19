@@ -26,6 +26,9 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
       name: 'Remove Symlink',
       callback: () => this.promptRemoveSymlink(),
     });
+
+    // Initialize the ignore patterns
+    this.ignore_patterns = await this.load_ignore_patterns();
   }
 
   async onunload() {
@@ -134,6 +137,7 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
       this.symlinks.push(newLink);
     }
 
+    await this.updateIgnorePatterns(linkPath, true); // Add to ignore patterns
     await this.saveData(this.symlinks);
     await this.recreateSymlinks();
     new Notice(`Symlink added: ${linkPath}`);
@@ -141,13 +145,55 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
 
   // Remove a symlink configuration and update symlinks
   async removeSymlink(linkPath) {
-    // should remove the symlink from the file system
-    fs.unlinkSync(linkPath);
     // should remove the symlink from the config
     this.symlinks = this.symlinks.filter((link) => link.linkPath !== linkPath);
     await this.saveData(this.symlinks);
     await this.recreateSymlinks();
+    await this.updateIgnorePatterns(linkPath, false); // Remove from ignore patterns
+    // should remove the symlink from the file system
+    fs.unlinkSync(linkPath);
     new Notice(`Symlink removed: ${linkPath}`);
+  }
+
+  async loadIgnorePatterns() {
+    const appJsonPath = path.join(this.app.vault.configDir, 'app.json');
+    let ignorePatterns = [];
+    
+    if (fs.existsSync(appJsonPath)) {
+      const appJson = JSON.parse(fs.readFileSync(appJsonPath, 'utf8'));
+      ignorePatterns = appJson.userIgnoreFilters || [];
+    }
+    
+    return ignorePatterns;
+  }
+
+  async updateIgnorePatterns(linkPath, add) {
+    const appJsonPath = path.join(this.app.vault.configDir, 'app.json');
+    let appJson = {};
+    
+    if (fs.existsSync(appJsonPath)) {
+      appJson = JSON.parse(fs.readFileSync(appJsonPath, 'utf8'));
+    }
+
+    if (!appJson.userIgnoreFilters) {
+      appJson.userIgnoreFilters = [];
+    }
+
+    const relativeLinkPath = path.relative(this.app.vault.adapter.basePath, linkPath);
+    const ignorePattern = `/${relativeLinkPath}`;
+
+    if (add) {
+      if (!appJson.userIgnoreFilters.includes(ignorePattern)) {
+        appJson.userIgnoreFilters.push(ignorePattern);
+      }
+    } else {
+      appJson.userIgnoreFilters = appJson.userIgnoreFilters.filter(
+        (pattern) => pattern !== ignorePattern
+      );
+    }
+
+    fs.writeFileSync(appJsonPath, JSON.stringify(appJson, null, 2));
+    this.ignorePatterns = appJson.userIgnoreFilters;
   }
 };
 
