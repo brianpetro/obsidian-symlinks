@@ -277,7 +277,7 @@ class SymlinkModal extends Modal {
   }
 
   is_valid_file_name(fileName) {
-    const validFileNameRegex = /^[a-zA-Z0-9_\-\.]+$/;
+    const validFileNameRegex = /^[a-zA-Z0-9_\-\. ]+$/;
     return validFileNameRegex.test(fileName);
   }
 
