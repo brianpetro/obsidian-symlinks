@@ -181,15 +181,13 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
       appJson.userIgnoreFilters = [];
     }
 
-    const ignorePattern = `/${linkPath}`;
-
     if (add) {
-      if (!appJson.userIgnoreFilters.includes(ignorePattern)) {
-        appJson.userIgnoreFilters.push(ignorePattern);
+      if (!appJson.userIgnoreFilters.includes(linkPath)) {
+        appJson.userIgnoreFilters.push(linkPath);
       }
     } else {
       appJson.userIgnoreFilters = appJson.userIgnoreFilters.filter(
-        (pattern) => pattern !== ignorePattern
+        (pattern) => pattern !== linkPath
       );
     }
 
