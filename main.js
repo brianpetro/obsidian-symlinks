@@ -141,6 +141,9 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
 
   // Remove a symlink configuration and update symlinks
   async removeSymlink(linkPath) {
+    // should remove the symlink from the file system
+    fs.unlinkSync(linkPath);
+    // should remove the symlink from the config
     this.symlinks = this.symlinks.filter((link) => link.linkPath !== linkPath);
     await this.saveData(this.symlinks);
     await this.recreateSymlinks();
