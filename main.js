@@ -155,7 +155,7 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
     new Notice(`Symlink removed: ${linkPath}`);
   }
 
-  async loadIgnorePatterns() {
+  async load_ignore_patterns() {
     const vaultPath = this.app.vault.adapter.basePath;
     const appJsonPath = path.join(vaultPath, this.app.vault.configDir, 'app.json');
     let ignorePatterns = [];
