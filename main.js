@@ -255,11 +255,6 @@ class SymlinkModal extends Modal {
             return;
           }
 
-          if (!this.is_valid_file_name(fileName)) {
-            new Notice('Invalid file name. Please use only letters, numbers, underscores, hyphens, and periods.');
-            return;
-          }
-
           const link_path = this.get_platform_specific_path(path.join(folderPath, fileName));
           const target_path = this.get_platform_specific_path(targetPath);
           this.close();
@@ -274,11 +269,6 @@ class SymlinkModal extends Modal {
     const previewEl = this.contentEl.querySelector('div:last-child');
     const previewPath = this.get_platform_specific_path(path.join(folderPath, fileName));
     previewEl.setText(`Preview: ${previewPath}`);
-  }
-
-  is_valid_file_name(fileName) {
-    const validFileNameRegex = /^[a-zA-Z0-9_\-\. ]+$/;
-    return validFileNameRegex.test(fileName);
   }
 
   get_platform_specific_path(filePath) {
