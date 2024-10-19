@@ -156,7 +156,8 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
   }
 
   async loadIgnorePatterns() {
-    const appJsonPath = path.join(this.app.vault.configDir, 'app.json');
+    const vaultPath = this.app.vault.adapter.basePath;
+    const appJsonPath = path.join(vaultPath, this.app.vault.configDir, 'app.json');
     let ignorePatterns = [];
     
     if (fs.existsSync(appJsonPath)) {
@@ -168,7 +169,8 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
   }
 
   async updateIgnorePatterns(linkPath, add) {
-    const appJsonPath = path.join(this.app.vault.configDir, 'app.json');
+    const vaultPath = this.app.vault.adapter.basePath;
+    const appJsonPath = path.join(vaultPath, this.app.vault.configDir, 'app.json');
     let appJson = {};
     
     if (fs.existsSync(appJsonPath)) {
@@ -179,7 +181,7 @@ module.exports = class SymlinkManagerPlugin extends Plugin {
       appJson.userIgnoreFilters = [];
     }
 
-    const relativeLinkPath = path.relative(this.app.vault.adapter.basePath, linkPath);
+    const relativeLinkPath = path.relative(vaultPath, linkPath);
     const ignorePattern = `/${relativeLinkPath}`;
 
     if (add) {
