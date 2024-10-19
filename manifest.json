@@ -1,7 +1,7 @@
 {
   "id": "smart-symlinks",
   "name": "Smart Symlinks",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "minAppVersion": "0.9.12",
   "description": "Manages platform-specific symlinks by recreating them on each platform.",
   "author": "🌴 Brian Petro",
